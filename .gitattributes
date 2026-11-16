@@ -1,0 +1,4 @@
+index.js whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+modelos/setups.js whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+eventos/guild/messageCreate.js whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+eventos/client/ready.js whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

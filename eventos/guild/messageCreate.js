@@ -1,23 +1,18 @@
 const config = require(`${process.cwd()}/config/config.json`);
-const Discord = require('discord.js');
 const serverSchema = require(`${process.cwd()}/modelos/servidor.js`)
 const { asegurar_todo } = require(`${process.cwd()}/utils/funciones.js`)
+const {routeMentionToGemini} = require(`${process.cwd()}/utils/ia-mention.js`);
 module.exports = async (client, message) => {
     if (!message.guild || !message.channel || message.author.bot) return;
     await asegurar_todo(message.guild.id, message.author.id);
     let data = await serverSchema.findOne({guildID: message.guild.id});
 
-    //si el bot es mencionado, devolvemos un mensaje de respuesta indicando el prefijo establecido en el servidor
-    if(message.content.includes(client.user.id)) return message.reply({
-        embeds: [
-            new Discord.EmbedBuilder()
-            .setTitle(`✅ **Para ver mis comandos usa \`${data.prefijo}help\`!**`)
-            .setFooter({text: `© desarrollado por dewstouh#1088 | 2022`, iconURL: `https://cdn.discordapp.com/avatars/282942681980862474/7ff4f4ae92af5feb0d258a71cdb0b060.png`})
-            .setColor(client.color)
-        ]
-    })
+    if (!message.content.startsWith(data.prefijo)) {
+        const iaCommand = client.commands.get("ia");
+        await routeMentionToGemini(client, message, data.prefijo, iaCommand);
+        return;
+    }
 
-    if (!message.content.startsWith(data.prefijo)) return;
     const args = message.content.slice(data.prefijo.length).trim().split(" ");
     const cmd = args.shift()?.toLowerCase();
     const command = client.commands.get(cmd) || client.commands.find(c => c.aliases && c.aliases.includes(cmd));

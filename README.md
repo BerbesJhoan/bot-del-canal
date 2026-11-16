@@ -12,6 +12,68 @@ Gracias por usar este código! Porfavor, si tienes dudas, errores o preguntas so
 
 # Guía de Instalación 🔥
 
+## Comandos añadidos
+
+El bot conserva su prefijo por servidor. Las funciones incorporadas de
+información, moderación y configuración se usan así:
+
+* `serverinfo` y `userinfo [@miembro]`
+* `clear <1-99>` elimina mensajes recientes; los de más de 14 días no se pueden borrar en bloque.
+* `anuncio #canal | título | mensaje` publica un anuncio. Para mencionar un rol:
+  `anuncio #canal | @rol | título | mensaje`.
+* `timeout @miembro <minutos> [razón]` admite hasta 28 días.
+* `role member @miembro @rol add|remove` administra un miembro.
+  `role all|humans|bots @rol add|remove` pide confirmación antes de actuar en grupo.
+* `setup-bienvenida #canal [mensaje]` configura la bienvenida; admite `{user}`,
+  `{server}` y `{memberCount}`. `setup-bienvenida off` la desactiva.
+* `setup-logs #canal` configura los registros de canales, baneos y mensajes;
+  `setup-logs off` los desactiva.
+* `ia <pregunta>` consulta a Gemini únicamente cuando se invoca. No usa el historial
+  del canal; la memoria opcional está desactivada por defecto. Tiene un límite de 1 pregunta por usuario cada 30
+  segundos y 10 preguntas por servidor cada minuto dentro de este proceso del bot.
+* También puedes mencionar al bot y escribir tu pregunta sin prefijo. La mención
+  sola o un mensaje que empieza por el prefijo no activa esta ruta; los comandos
+  existentes, incluido `ia`, conservan prioridad.
+* `setup-ia #canal` (administradores) habilita un canal social dedicado donde Brasa
+  inicia como máximo una conversación breve por día UTC. `setup-ia off` lo desactiva.
+  Los inicios no usan Gemini, no leen el historial, no mencionan usuarios y requieren
+  permiso para escribir. Las respuestas a menciones y `ia` siguen funcionando.
+* `ia memoria activar` activa la memoria solo para tu usuario en ese servidor. Guarda
+  tus preguntas y respuestas exitosas de `ia` en MongoDB y las envía como contexto
+  en próximas consultas. La retención es indefinida hasta que la borres manualmente.
+* `ia memoria ver` te envía los intercambios guardados por mensaje directo, no al canal.
+* `ia memoria desactivar` deja de guardar y enviar contexto, pero conserva los datos
+  existentes. `ia memoria borrar` los elimina y desactiva la memoria.
+
+Los comandos de configuración requieren permisos de administrador; moderación y
+gestión de roles verifican permisos y jerarquía. Los canales se configuran en cada
+servidor, sin depender de IDs externos.
+
+### Configurar el comando de IA
+
+Define `GEMINI_API_KEY` en las variables de entorno del proceso que ejecuta el bot.
+Opcionalmente, define `GEMINI_MODEL` para elegir otro modelo de Gemini; el valor
+predeterminado es `gemini-3.5-flash-lite`. No guardes estas claves en `config.json`,
+el código ni en el repositorio. El comando requiere una conexión HTTPS saliente a
+Google y devuelve un mensaje claro si falta configuración o el proveedor falla.
+
+**Privacidad:** antes de cada consulta, el bot indica qué contexto se enviará. Sin
+memoria, solo envía la pregunta escrita en `ia`; no lee mensajes del canal. Con la
+memoria activada, envía además hasta cinco intercambios previos tuyos de ese servidor.
+Al activarla, se te informa de que tus preguntas y respuestas exitosas se guardan en
+MongoDB indefinidamente hasta que las borres. Google puede usar contenido enviado en
+el nivel gratuito para mejorar sus productos. No incluyas información sensible.
+
+### Personalidad de Brasa
+
+Brasa es un personaje virtual original: una reparadora ficticia de radios y bicicletas
+de Caleta Bruma, competitiva, impulsiva y fan de las empanadas picantes. Su humor,
+opiniones y nivel de cercanía vienen de instrucciones propias del bot, no de un
+personaje preexistente. La confianza solo progresa cuando una persona con memoria
+activada expresa confianza o comparte de forma explícita un gusto no sensible
+reconocido (comida, música o pasatiempos); no aumenta por contar mensajes ni infiere
+rasgos privados. El tono se vuelve más cálido cuando el propio mensaje pide apoyo.
+
 
 ## ✅ Requisitos Mínimos
 

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../../config/config.json');
+const setupSchema = require('../../modelos/setups.js');
+const {startDailyIcebreakers} = require('../../utils/ia-social.js');
 module.exports = client => {
     //Nos conectamos a la base de datos
 
@@ -9,6 +11,7 @@ module.exports = client => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     }).then(() => {
+        startDailyIcebreakers(client, setupSchema);
         console.log(`
 ╔═════════════════════════════════════════════════════╗
 ║                                                     ║
